@@ -1,0 +1,58 @@
+---
+import { siteConfig } from "../config/site";
+
+interface Props {
+	title?: string;
+	description?: string;
+	canonical?: string;
+	image?: string;
+	ogType?: string;
+	noIndex?: boolean;
+	twitterCard?: "summary" | "summary_large_image";
+}
+
+const {
+	title = siteConfig.name,
+	description = siteConfig.description,
+	canonical,
+	image,
+	ogType = "website",
+	noIndex = false,
+	twitterCard = "summary_large_image",
+} = Astro.props as Props;
+
+// Build absolute canonical URL when possible using `site` from astro.config
+let canonicalUrl: string | undefined = canonical;
+try {
+	if (!canonicalUrl) {
+		const site = Astro.site?.toString();
+		if (site) {
+			const path = Astro.url?.pathname ?? "/";
+			canonicalUrl = new URL(path, site).toString();
+		}
+	}
+} catch {}
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+{noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+{image && <meta property="og:image" content={image} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+{image && <meta name="twitter:image" content={image} />}
+
+<slot />

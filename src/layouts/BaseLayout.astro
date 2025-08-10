@@ -1,0 +1,24 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Head from "../components/Head.astro";
+import { siteConfig } from "../config/site";
+
+const { title = siteConfig.name, description = siteConfig.description } =
+	Astro.props;
+---
+
+<html lang="pt-BR">
+	<head>
+		<Head title={title} description={description}>
+			<slot name="head" />
+		</Head>
+	</head>
+	<body class="min-h-svh flex flex-col antialiased">
+		<Header />
+		<main class="container mx-auto flex-1 px-4 py-8">
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

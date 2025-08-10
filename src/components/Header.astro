@@ -1,0 +1,30 @@
+---
+import { siteConfig } from "../config/site";
+const { currentPath = Astro.url?.pathname } = Astro.props;
+---
+<header class="border-b">
+	<div class="container mx-auto flex items-center justify-between px-4 py-4">
+		<a class="font-bold text-lg" href="/">{siteConfig.name}</a>
+		<nav aria-label="Navegação principal">
+			<ul class="flex gap-4">
+				{
+					siteConfig.nav.map((item) => (
+						<li>
+							<a
+								class="hover:underline"
+								href={item.href}
+								aria-current={
+									currentPath === item.href
+										? "page"
+										: undefined
+								}
+							>
+								{item.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</header>
